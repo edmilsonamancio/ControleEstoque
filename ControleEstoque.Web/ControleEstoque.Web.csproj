@@ -160,7 +160,7 @@
     <Compile Include="Helpers\CriptoHelper.cs" />
     <Compile Include="Models\GrupoProdutoModel.cs" />
     <Compile Include="Models\LocaisArmazenamentoModel.cs" />
-    <Compile Include="Models\LoginViewModel.cs" />
+    <Compile Include="Models\LoginModel.cs" />
     <Compile Include="Models\MarcaProdutoModel.cs" />
     <Compile Include="Models\PerfilModel.cs" />
     <Compile Include="Models\UnidadeMedidaModel.cs" />

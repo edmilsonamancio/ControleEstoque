@@ -6,7 +6,7 @@ using System.Web;
 
 namespace ControleEstoque.Web.Models
 {
-    public class LoginViewModel
+    public class LoginModel
     {
         [Required(ErrorMessage = "Informe o usuário")]
         [Display(Name = "Usuário:")]

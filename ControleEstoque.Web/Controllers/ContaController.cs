@@ -19,7 +19,7 @@ namespace ControleEstoque.Web.Controllers
 
         [HttpPost]
         [AllowAnonymous]
-        public ActionResult Login(LoginViewModel login, string returnUrl)
+        public ActionResult Login(LoginModel login, string returnUrl)
         {
             if (!ModelState.IsValid)
             {
