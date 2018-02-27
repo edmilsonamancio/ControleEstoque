@@ -62,6 +62,9 @@ $(document).on('click', '#btn_incluir', function () {
 		if (response) {
 			abrir_form(response);
 		}
+	})
+	.fail(function() {
+		swal('Aviso', 'Não foi possivel recuperar as informações. Tente novamente em instantes', 'warning');
 	});
 })
 .on('click', '.btn-excluir', function () {

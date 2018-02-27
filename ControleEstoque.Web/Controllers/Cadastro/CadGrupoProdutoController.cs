@@ -40,6 +40,7 @@ namespace ControleEstoque.Web.Controllers
 		[ValidateAntiForgeryToken]
         public JsonResult RecuperarGrupoProduto(int id)
         {
+			throw new Exception();
             return Json(GrupoProdutoModel.RecuperarPeloId(id));
         }
 

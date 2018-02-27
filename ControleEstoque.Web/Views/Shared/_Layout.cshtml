@@ -1,12 +1,13 @@
 ﻿<!DOCTYPE html>
 <html>
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@ViewBag.Title - Controle de Estoque</title>
     @Styles.Render("~/Content/css")
     @Scripts.Render("~/bundles/modernizr")
+    <link href="~/Content/sweetalert2.css" rel="stylesheet" />
 </head>
 <body>
     <div class="navbar navbar-inverse navbar-fixed-top">
@@ -76,23 +77,21 @@
                                 <li>@Html.ActionLink("Entradas vs saídas por mês", "EntradaSaidaMes", "Grafico")</li>
                             </ul>
                         </li>
-                    </ul>
-                    using (Html.BeginForm("LogOff", "Conta", FormMethod.Post, new { id = "logoffForm" }))
+                    </ul>using (Html.BeginForm("LogOff", "Conta", FormMethod.Post, new { id = "logoffForm" }))
                     {
                         <ul class="nav navbar-nav navbar-right">
                             <li>@Html.ActionLink("Sobre", "Sobre", "Home")</li>
                             <li><a href="#">Olá @User.Identity.Name</a></li>
                             <li><a href="javascript:document.getElementById('logoffForm').submit()">Sair</a></li>
                         </ul>
-                    }
+}
                 }
                 else
                 {
                     <ul class="nav navbar-nav navbar-right">
                         <li>@Html.ActionLink("Login", "Login", "Conta")</li>
-                    </ul>
-                }
-                
+                    </ul>}
+
             </div>
         </div>
     </div>
@@ -106,6 +105,9 @@
 
     @Scripts.Render("~/bundles/jquery")
     @Scripts.Render("~/bundles/bootstrap")
+
+
+    <script src="~/Scripts/sweetalert.min.js"></script>
     @RenderSection("scripts", required: false)
 </body>
 </html>
