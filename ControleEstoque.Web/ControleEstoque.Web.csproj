@@ -18,7 +18,7 @@
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <MvcBuildViews>false</MvcBuildViews>
     <UseIISExpress>true</UseIISExpress>
-    <Use64BitIISExpress />
+    <Use64BitIISExpress>false</Use64BitIISExpress>
     <IISExpressSSLPort />
     <IISExpressAnonymousAuthentication />
     <IISExpressWindowsAuthentication />
@@ -146,6 +146,7 @@
     <Compile Include="Controllers\Cadastro\CadGrupoProdutoController.cs" />
     <Compile Include="Controllers\Cadastro\CadLocaisArmazenamentoController.cs" />
     <Compile Include="Controllers\Cadastro\CadMarcaProdutoController.cs" />
+    <Compile Include="Controllers\Cadastro\CadPaisController.cs" />
     <Compile Include="Controllers\Cadastro\CadPerfilController.cs" />
     <Compile Include="Controllers\Cadastro\CadUnidadeMedidaController.cs" />
     <Compile Include="Controllers\Cadastro\CadUsuarioController.cs" />
@@ -162,6 +163,7 @@
     <Compile Include="Models\LocaisArmazenamentoModel.cs" />
     <Compile Include="Models\LoginModel.cs" />
     <Compile Include="Models\MarcaProdutoModel.cs" />
+    <Compile Include="Models\PaisModel.cs" />
     <Compile Include="Models\PerfilModel.cs" />
     <Compile Include="Models\UnidadeMedidaModel.cs" />
     <Compile Include="Models\UsuarioModel.cs" />
@@ -175,6 +177,7 @@
     <Content Include="Content\Cadastro\GrupoProduto.css" />
     <Content Include="Content\Cadastro\LocaisArmazenamento.css" />
     <Content Include="Content\Cadastro\MarcaProduto.css" />
+    <Content Include="Content\Cadastro\Pais.css" />
     <Content Include="Content\Cadastro\Perfil.css" />
     <Content Include="Content\Cadastro\UnidadeMedida.css" />
     <Content Include="Content\Cadastro\Usuario.css" />
@@ -196,6 +199,7 @@
     <Content Include="Scripts\Cadastro\GrupoProduto.js" />
     <Content Include="Scripts\Cadastro\LocaisArmazenamento.js" />
     <Content Include="Scripts\Cadastro\MarcaProduto.js" />
+    <Content Include="Scripts\Cadastro\Pais.js" />
     <Content Include="Scripts\Cadastro\Perfil.js" />
     <Content Include="Scripts\Cadastro\UnidadeMedida.js" />
     <Content Include="Scripts\Cadastro\Usuario.js" />
@@ -209,7 +213,6 @@
     <Content Include="Scripts\modernizr-2.6.2.js" />
     <Content Include="Scripts\respond.js" />
     <Content Include="Scripts\respond.min.js" />
-    <Content Include="Scripts\sweetalert2.js" />
     <Content Include="Scripts\utils\classes.js" />
     <Content Include="Scripts\utils\dom.js" />
     <Content Include="Scripts\utils\params.js" />
@@ -230,9 +233,6 @@
     <Content Include="Views\CadGrupoProduto\Index.cshtml" />
     <Content Include="Views\Cadastro\MarcaProduto.cshtml" />
     <Content Include="Views\CadUsuario\Index.cshtml" />
-    <Content Include="Views\Cadastro\Cidade.cshtml" />
-    <Content Include="Views\Cadastro\Estado.cshtml" />
-    <Content Include="Views\Cadastro\Pais.cshtml" />
     <Content Include="Views\Cadastro\Produto.cshtml" />
     <Content Include="Views\Cadastro\LocalProduto.cshtml" />
     <Content Include="Views\Cadastro\Fornecedor.cshtml" />
@@ -251,6 +251,9 @@
     <Content Include="Views\Index.cshtml" />
     <Content Include="Views\CadLocaisArmazenamento\Index.cshtml" />
     <Content Include="Views\CadMarcaProduto\Index.cshtml" />
+    <Content Include="Views\CadCidade\Index.cshtml" />
+    <Content Include="Views\CadPais\Index.cshtml" />
+    <Content Include="Views\CadEstado\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
