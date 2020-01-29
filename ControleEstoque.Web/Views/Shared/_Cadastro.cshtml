@@ -39,7 +39,6 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @RenderSection("LinhaGrid", true)
                     </tbody>
                 </table>
                 <div id="mensagem_grid" @Html.Raw(lista != null && lista.Count > 0 ? "class=\"invisivel\"" : "")>
@@ -58,7 +57,7 @@
                             @for (int i = 2; i <= ViewBag.QuantPaginas; i++)
                             {
                                 <li class="page-item"><a class="page-link" href="#">@i</a></li>
-}
+                            }
                         </ul>
                     </nav>
                 </div>
@@ -88,6 +87,7 @@
     </fieldset>
 </div>
 @section Scripts {
+    <script src="~/Scripts/mustache.min.js"></script>
     <script src="~/Scripts/Cadastro/CadBase.js"></script>
     @RenderSection("Scripts", true)
 }

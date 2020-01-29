@@ -146,7 +146,7 @@ namespace ControleEstoque.Web.Models
                     {
                         comando.CommandText = "insert into Cidade (nome, codigo, ativo) values (@nome, @uf, @ativo); select convert(int, scope_identity())";
                         comando.Parameters.Add("@nome", SqlDbType.VarChar).Value = this.Nome;
-                        comando.Parameters.Add("@uf", SqlDbType.VarChar).Value = this.Uf;
+                        //comando.Parameters.Add("@uf", SqlDbType.VarChar).Value = this.Uf;
                         comando.Parameters.Add("@ativo", SqlDbType.VarChar).Value = (this.Ativo ? 1 : 0);
 
                         ret = (int)comando.ExecuteScalar();
@@ -155,7 +155,7 @@ namespace ControleEstoque.Web.Models
                     {
                         comando.CommandText = "update Cidade set nome=@nome, uf=@uf, ativo=@ativo where id=@id";
                         comando.Parameters.Add("@nome", SqlDbType.VarChar).Value = this.Nome;
-                        comando.Parameters.Add("@uf", SqlDbType.VarChar).Value = this.Uf;
+                        //comando.Parameters.Add("@uf", SqlDbType.VarChar).Value = this.Uf;
                         comando.Parameters.Add("@ativo", SqlDbType.VarChar).Value = (this.Ativo ? 1 : 0);
                         comando.Parameters.Add("@id", SqlDbType.Int).Value = this.Id;
 
