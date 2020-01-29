@@ -7,7 +7,7 @@ using System.Web.Mvc;
 namespace ControleEstoque.Web.Controllers.Cadastro
 {
     [Authorize(Roles = "Gerente,Administrativo")]
-    public class CadPaisController : Controller
+    public class CadCidadeController : Controller
     {
         private const int _quantMaxLinhasPorPagina = 5;
 
@@ -17,42 +17,43 @@ namespace ControleEstoque.Web.Controllers.Cadastro
             ViewBag.QuantMaxLinhasPorPagina = _quantMaxLinhasPorPagina;
             ViewBag.PaginaAtual = 1;
 
-            var lista = PaisModel.RecuperarLista(ViewBag.PaginaAtual, _quantMaxLinhasPorPagina);
-            var quant = PaisModel.RecuperarQuantidade();
+            var lista = CidadeModel.RecuperarLista(ViewBag.PaginaAtual, _quantMaxLinhasPorPagina);
+            var quant = CidadeModel.RecuperarQuantidade();
 
             var difQuantPaginas = (quant % ViewBag.QuantMaxLinhasPorPagina) > 0 ? 1 : 0;
             ViewBag.QuantPaginas = (quant / ViewBag.QuantMaxLinhasPorPagina) + difQuantPaginas;
+            ViewBag.Paises = PaisModel.RecuperarLista();
 
             return View(lista);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public JsonResult PaisPagina(int pagina, int tamPag)
+        public JsonResult CidadePagina(int pagina, int tamPag)
         {
-            var lista = PaisModel.RecuperarLista(pagina, tamPag);
+            var lista = CidadeModel.RecuperarLista(pagina, tamPag);
 
             return Json(lista);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public JsonResult RecuperarPais(int id)
+        public JsonResult RecuperarCidade(int id)
         {
-            return Json(PaisModel.RecuperarPeloId(id));
+            return Json(CidadeModel.RecuperarPeloId(id));
         }
 
         [HttpPost]
         [Authorize(Roles = "Gerente,Administrativo")]
         [ValidateAntiForgeryToken]
-        public JsonResult ExcluirPais(int id)
+        public JsonResult ExcluirCidade(int id)
         {
-            return Json(PaisModel.ExcluirPeloId(id));
+            return Json(CidadeModel.ExcluirPeloId(id));
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public JsonResult SalvarPais(PaisModel model)
+        public JsonResult SalvarCidade(CidadeModel model)
         {
             var resultado = "OK";
             var mensagens = new List<string>();
@@ -84,7 +85,5 @@ namespace ControleEstoque.Web.Controllers.Cadastro
             }
             return Json(new { Resultado = resultado, Mensagens = mensagens, IdSalvo = idSalvo });
         }
-    
-        
     }
 }

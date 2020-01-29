@@ -7,7 +7,7 @@ using System.Data.SqlClient;
 
 namespace ControleEstoque.Web.Models
 {
-    public class PaisModel
+    public class EstadoModel
     {
         public int Id { get; set; }
 
@@ -15,12 +15,13 @@ namespace ControleEstoque.Web.Models
         [MaxLength(30, ErrorMessage = "O nome pode ter no máximo 30 caracteres.")]
         public string Nome { get; set; }
 
-        [Required(ErrorMessage = "Preencha o código internacional.")]
+        [Required(ErrorMessage = "Preencha a unidade federativa.")]
         [MaxLength(3, ErrorMessage = "O código internacional deve ter no máximo 3 caracteres.")]
-        public string Codigo { get; set; }
+        public string Uf { get; set; }
 
         public bool Ativo { get; set; }
 
+        public int Id_Pais { get; set; }
         public static int RecuperarQuantidade()
         {
             var ret = 0;
@@ -32,17 +33,17 @@ namespace ControleEstoque.Web.Models
                 using (var comando = new SqlCommand())
                 {
                     comando.Connection = conexao;
-                    comando.CommandText = "select count(*) from pais";
+                    comando.CommandText = "select count(*) from Estado";
                     ret = (int)comando.ExecuteScalar();
                 }
             }
 
             return ret;
         }
-               
-        public static List<PaisModel> RecuperarLista(int pagina = 0, int tamPagina = 0, string filtro = "")
+
+        public static List<EstadoModel> RecuperarLista(int pagina = 0, int tamPagina = 0, string filtro = "", int idPais = 0)
         {
-            var ret = new List<PaisModel>();
+            var ret = new List<EstadoModel>();
 
             using (var conexao = new SqlConnection())
             {
@@ -52,45 +53,39 @@ namespace ControleEstoque.Web.Models
                 {
                     var pos = (pagina - 1) * tamPagina;
 
-                    var filtrowhere = "";
-
+                    var filtroWhere = "";
                     if (!string.IsNullOrEmpty(filtro))
                     {
-                        filtrowhere = string.Format(" where lower(nome) like '%{0}%'", filtro.ToLower());
+                        filtroWhere = string.Format(" where lower(nome) like '%{0}%'", filtro.ToLower());
+                    }
+
+                    if (idPais > 0)
+                    {
+                        filtroWhere +=
+                            (string.IsNullOrEmpty(filtroWhere) ? " where" : " and") +
+                            string.Format(" id_pais = {0}", idPais);
                     }
 
                     var paginacao = "";
                     if (pagina > 0 && tamPagina > 0)
                     {
-                        paginacao = string.Format(" offset {0} rows fetch next {1} rows only",
+                        paginacao = string.Format(" offset {0} rows fetch next {1} row only",
                             pos > 0 ? pos : 0, tamPagina);
                     }
 
                     comando.Connection = conexao;
                     comando.CommandText = string.Format(
                         "select * " +
-                        "from pais" +
-                        filtrowhere +
-                        " order by nome" +
-                        paginacao);
-
-                    //comando.CommandText = string.Format(
-                    //    "select * " +
-                    //    "from pais" +
-                    //    filtrowhere +
-                    //    " order by nome" +
-                    //    " offset {0} rows fetch next {1} rows only",
-                    //    pos > 0 ? pos : 0, tamPagina);
-
-
+                        "from estado" + filtroWhere + " order by nome"+ paginacao);
                     var reader = comando.ExecuteReader();
+                   
                     while (reader.Read())
                     {
-                        ret.Add(new PaisModel
+                        ret.Add(new EstadoModel
                         {
                             Id = (int)reader["id"],
                             Nome = (string)reader["nome"],
-                            Codigo = (string)reader["codigo"],
+                            Uf = (string)reader["uf"],
                             Ativo = (bool)reader["ativo"]
                         });
                     }
@@ -99,9 +94,9 @@ namespace ControleEstoque.Web.Models
             return ret;
         }
 
-        public static PaisModel RecuperarPeloId(int id)
+        public static EstadoModel RecuperarPeloId(int id)
         {
-            PaisModel ret = null;
+            EstadoModel ret = null;
 
             using (var conexao = new SqlConnection())
             {
@@ -110,16 +105,17 @@ namespace ControleEstoque.Web.Models
                 using (var comando = new SqlCommand())
                 {
                     comando.Connection = conexao;
-                    comando.CommandText = "select * from pais where (id = @id)";
+                    comando.CommandText = "select * from estado where (id = @id)";
                     comando.Parameters.Add("@id", SqlDbType.Int).Value = id;
                     var reader = comando.ExecuteReader();
                     if (reader.Read())
                     {
-                        ret = new PaisModel
+                        ret = new EstadoModel
                         {
                             Id = (int)reader["id"],
                             Nome = (string)reader["nome"],
-                            Codigo = (string)reader["codigo"],
+                            Uf = (string)reader["uf"],
+                            Id_Pais = (int)reader["id_pais"],
                             Ativo = (bool)reader["ativo"]
                         };
                     }
@@ -142,7 +138,7 @@ namespace ControleEstoque.Web.Models
                     using (var comando = new SqlCommand())
                     {
                         comando.Connection = conexao;
-                        comando.CommandText = "delete from pais where id = @id";
+                        comando.CommandText = "delete from estado where id = @id";
                         comando.Parameters.Add("@id", SqlDbType.Int).Value = id;
                         ret = (comando.ExecuteNonQuery() > 0);
                     }
@@ -168,19 +164,21 @@ namespace ControleEstoque.Web.Models
 
                     if (model == null)
                     {
-                        comando.CommandText = "insert into pais (nome, codigo, ativo) values (@nome, @codigo, @ativo); select convert(int, scope_identity())";
+                        comando.CommandText = "insert into estado (nome, uf, ativo, id_pais) values (@nome, @uf, @ativo, @id_pais); select convert(int, scope_identity())";
                         comando.Parameters.Add("@nome", SqlDbType.VarChar).Value = this.Nome;
-                        comando.Parameters.Add("@codigo", SqlDbType.VarChar).Value = this.Codigo;
+                        comando.Parameters.Add("@uf", SqlDbType.VarChar).Value = this.Uf;
                         comando.Parameters.Add("@ativo", SqlDbType.VarChar).Value = (this.Ativo ? 1 : 0);
+                        comando.Parameters.Add("@id_pais", SqlDbType.Int).Value = this.Id_Pais;
 
                         ret = (int)comando.ExecuteScalar();
                     }
                     else
                     {
-                        comando.CommandText = "update pais set nome=@nome, codigo=@codigo, ativo=@ativo where id=@id";
+                        comando.CommandText = "update Estado set nome=@nome, uf=@uf, ativo=@ativo, id_pais=@id_pais where id=@id";
                         comando.Parameters.Add("@nome", SqlDbType.VarChar).Value = this.Nome;
-                        comando.Parameters.Add("@codigo", SqlDbType.VarChar).Value = this.Codigo;
+                        comando.Parameters.Add("@uf", SqlDbType.VarChar).Value = this.Uf;
                         comando.Parameters.Add("@ativo", SqlDbType.VarChar).Value = (this.Ativo ? 1 : 0);
+                        comando.Parameters.Add("@id_pais", SqlDbType.Int).Value = this.Id_Pais;
                         comando.Parameters.Add("@id", SqlDbType.Int).Value = this.Id;
 
                         if (comando.ExecuteNonQuery() > 0)

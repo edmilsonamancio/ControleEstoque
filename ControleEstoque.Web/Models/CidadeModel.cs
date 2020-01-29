@@ -7,7 +7,7 @@ using System.Data.SqlClient;
 
 namespace ControleEstoque.Web.Models
 {
-    public class PaisModel
+    public class CidadeModel
     {
         public int Id { get; set; }
 
@@ -15,12 +15,15 @@ namespace ControleEstoque.Web.Models
         [MaxLength(30, ErrorMessage = "O nome pode ter no máximo 30 caracteres.")]
         public string Nome { get; set; }
 
-        [Required(ErrorMessage = "Preencha o código internacional.")]
-        [MaxLength(3, ErrorMessage = "O código internacional deve ter no máximo 3 caracteres.")]
-        public string Codigo { get; set; }
+        [Required(ErrorMessage = "Preencha o país.")]
+        public int Id_Pais { get; set; }
+
+        [Required(ErrorMessage = "Preencha o estado.")]
+        public int Id_Estado { get; set; }
 
         public bool Ativo { get; set; }
 
+        public int Id_Cidade { get; set; }
         public static int RecuperarQuantidade()
         {
             var ret = 0;
@@ -32,17 +35,17 @@ namespace ControleEstoque.Web.Models
                 using (var comando = new SqlCommand())
                 {
                     comando.Connection = conexao;
-                    comando.CommandText = "select count(*) from pais";
+                    comando.CommandText = "select count(*) from Cidade";
                     ret = (int)comando.ExecuteScalar();
                 }
             }
 
             return ret;
         }
-               
-        public static List<PaisModel> RecuperarLista(int pagina = 0, int tamPagina = 0, string filtro = "")
+
+        public static List<CidadeModel> RecuperarLista(int pagina, int tamPagina)
         {
-            var ret = new List<PaisModel>();
+            var ret = new List<CidadeModel>();
 
             using (var conexao = new SqlConnection())
             {
@@ -52,45 +55,18 @@ namespace ControleEstoque.Web.Models
                 {
                     var pos = (pagina - 1) * tamPagina;
 
-                    var filtrowhere = "";
-
-                    if (!string.IsNullOrEmpty(filtro))
-                    {
-                        filtrowhere = string.Format(" where lower(nome) like '%{0}%'", filtro.ToLower());
-                    }
-
-                    var paginacao = "";
-                    if (pagina > 0 && tamPagina > 0)
-                    {
-                        paginacao = string.Format(" offset {0} rows fetch next {1} rows only",
-                            pos > 0 ? pos : 0, tamPagina);
-                    }
-
                     comando.Connection = conexao;
                     comando.CommandText = string.Format(
-                        "select * " +
-                        "from pais" +
-                        filtrowhere +
-                        " order by nome" +
-                        paginacao);
-
-                    //comando.CommandText = string.Format(
-                    //    "select * " +
-                    //    "from pais" +
-                    //    filtrowhere +
-                    //    " order by nome" +
-                    //    " offset {0} rows fetch next {1} rows only",
-                    //    pos > 0 ? pos : 0, tamPagina);
-
-
+                        "select * from Cidade order by nome offset {0} rows fetch next {1} rows only",
+                        pos > 0 ? pos : 0, tamPagina);
                     var reader = comando.ExecuteReader();
                     while (reader.Read())
                     {
-                        ret.Add(new PaisModel
+                        ret.Add(new CidadeModel
                         {
                             Id = (int)reader["id"],
                             Nome = (string)reader["nome"],
-                            Codigo = (string)reader["codigo"],
+                            Id_Estado = (int)reader["id_estado"],
                             Ativo = (bool)reader["ativo"]
                         });
                     }
@@ -99,9 +75,9 @@ namespace ControleEstoque.Web.Models
             return ret;
         }
 
-        public static PaisModel RecuperarPeloId(int id)
+        public static CidadeModel RecuperarPeloId(int id)
         {
-            PaisModel ret = null;
+            CidadeModel ret = null;
 
             using (var conexao = new SqlConnection())
             {
@@ -110,16 +86,16 @@ namespace ControleEstoque.Web.Models
                 using (var comando = new SqlCommand())
                 {
                     comando.Connection = conexao;
-                    comando.CommandText = "select * from pais where (id = @id)";
+                    comando.CommandText = "select * from Cidade where (id = @id)";
                     comando.Parameters.Add("@id", SqlDbType.Int).Value = id;
                     var reader = comando.ExecuteReader();
                     if (reader.Read())
                     {
-                        ret = new PaisModel
+                        ret = new CidadeModel
                         {
                             Id = (int)reader["id"],
                             Nome = (string)reader["nome"],
-                            Codigo = (string)reader["codigo"],
+                            Id_Estado = (int)reader["id_estado"],
                             Ativo = (bool)reader["ativo"]
                         };
                     }
@@ -142,7 +118,7 @@ namespace ControleEstoque.Web.Models
                     using (var comando = new SqlCommand())
                     {
                         comando.Connection = conexao;
-                        comando.CommandText = "delete from pais where id = @id";
+                        comando.CommandText = "delete from Cidade where id = @id";
                         comando.Parameters.Add("@id", SqlDbType.Int).Value = id;
                         ret = (comando.ExecuteNonQuery() > 0);
                     }
@@ -168,18 +144,18 @@ namespace ControleEstoque.Web.Models
 
                     if (model == null)
                     {
-                        comando.CommandText = "insert into pais (nome, codigo, ativo) values (@nome, @codigo, @ativo); select convert(int, scope_identity())";
+                        comando.CommandText = "insert into Cidade (nome, codigo, ativo) values (@nome, @uf, @ativo); select convert(int, scope_identity())";
                         comando.Parameters.Add("@nome", SqlDbType.VarChar).Value = this.Nome;
-                        comando.Parameters.Add("@codigo", SqlDbType.VarChar).Value = this.Codigo;
+                        comando.Parameters.Add("@uf", SqlDbType.VarChar).Value = this.Uf;
                         comando.Parameters.Add("@ativo", SqlDbType.VarChar).Value = (this.Ativo ? 1 : 0);
 
                         ret = (int)comando.ExecuteScalar();
                     }
                     else
                     {
-                        comando.CommandText = "update pais set nome=@nome, codigo=@codigo, ativo=@ativo where id=@id";
+                        comando.CommandText = "update Cidade set nome=@nome, uf=@uf, ativo=@ativo where id=@id";
                         comando.Parameters.Add("@nome", SqlDbType.VarChar).Value = this.Nome;
-                        comando.Parameters.Add("@codigo", SqlDbType.VarChar).Value = this.Codigo;
+                        comando.Parameters.Add("@uf", SqlDbType.VarChar).Value = this.Uf;
                         comando.Parameters.Add("@ativo", SqlDbType.VarChar).Value = (this.Ativo ? 1 : 0);
                         comando.Parameters.Add("@id", SqlDbType.Int).Value = this.Id;
 

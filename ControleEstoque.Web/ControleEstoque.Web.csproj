@@ -143,6 +143,8 @@
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Controllers\CadastroController.cs" />
+    <Compile Include="Controllers\Cadastro\CadCidadeController.cs" />
+    <Compile Include="Controllers\Cadastro\CadEstadoController.cs" />
     <Compile Include="Controllers\Cadastro\CadGrupoProdutoController.cs" />
     <Compile Include="Controllers\Cadastro\CadLocaisArmazenamentoController.cs" />
     <Compile Include="Controllers\Cadastro\CadMarcaProdutoController.cs" />
@@ -159,6 +161,8 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Helpers\CriptoHelper.cs" />
+    <Compile Include="Models\CidadeModel.cs" />
+    <Compile Include="Models\EstadoModel.cs" />
     <Compile Include="Models\GrupoProdutoModel.cs" />
     <Compile Include="Models\LocaisArmazenamentoModel.cs" />
     <Compile Include="Models\LoginModel.cs" />
@@ -174,6 +178,8 @@
     <Content Include="Content\bootstrap-select.min.css" />
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
+    <Content Include="Content\Cadastro\Cidade.css" />
+    <Content Include="Content\Cadastro\Estado.css" />
     <Content Include="Content\Cadastro\GrupoProduto.css" />
     <Content Include="Content\Cadastro\LocaisArmazenamento.css" />
     <Content Include="Content\Cadastro\MarcaProduto.css" />
@@ -196,6 +202,8 @@
     </Content>
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\Cadastro\CadBase.js" />
+    <Content Include="Scripts\Cadastro\Cidade.js" />
+    <Content Include="Scripts\Cadastro\Estado.js" />
     <Content Include="Scripts\Cadastro\GrupoProduto.js" />
     <Content Include="Scripts\Cadastro\LocaisArmazenamento.js" />
     <Content Include="Scripts\Cadastro\MarcaProduto.js" />

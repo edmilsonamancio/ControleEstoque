@@ -6,7 +6,7 @@ using System.Web.Mvc;
 
 namespace ControleEstoque.Web.Controllers
 {
-    [Authorize(Roles = "Gerente")]
+    [Authorize(Roles = "Gerente,Administrativo")]
     public class CadPerfilController : Controller
     {
         private const int _quantMaxLinhasPorPagina = 5;
